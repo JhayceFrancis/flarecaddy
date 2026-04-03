@@ -1,0 +1,29 @@
+name: Build and Push Custom Caddy
+
+# This triggers the build automatically if you edit the Dockerfile
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows you to run it manually from the GitHub website
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Log into GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push the Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/jhaycefrancis/caddy-cloudflare:latest
