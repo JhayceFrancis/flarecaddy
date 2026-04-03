@@ -1,11 +1,13 @@
 name: Build and Push Custom Caddy
 
-# This triggers the build automatically if you edit the Dockerfile
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch: # Allows you to run it manually from the GitHub website
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build-push:
