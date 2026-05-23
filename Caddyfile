@@ -1,0 +1,26 @@
+# Global Block
+{
+    email your_email@domain.com
+}
+
+# The Wildcard Block: Secures everything under your domain
+*.yourdomain.com {
+    tls {
+        # Instructs Caddy to use the Cloudflare API for domain verification
+        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+        resolvers 1.1.1.1
+        propagation_timeout -1
+        propagation_delay 60s
+    }
+
+    # Example internal routing (Must use internal container ports on a shared Docker network)
+    @example host app.yourdomain.com
+    handle @example {
+        reverse_proxy app_container_name:8080
+    }
+    
+    # Catch-All Security: Drops requests to undefined subdomains
+    handle {
+        abort
+    }
+}
