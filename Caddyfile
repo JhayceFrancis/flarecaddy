@@ -1,3 +1,6 @@
+# Here is a template demonstrating how to structure your Caddyfile to utilise the Cloudflare DNS module for a wildcard domain. Note the required tls block configuration.
+# Note the required tls block configuration.
+
 # Global Block
 {
     email your_email@domain.com
