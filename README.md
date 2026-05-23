@@ -38,3 +38,75 @@ services:
       - /path/to/Caddyfile:/etc/caddy/Caddyfile:ro
       - /path/to/caddy_data:/data
       - /path/to/caddy_config:/config
+```
+---
+
+### Unraid Installation
+
+If deploying via Unraid, set up the container with the following mappings:
+
+Repository: ```ghcr.io/jhaycefrancis/flarecaddy:latest```
+
+Network Type: ```bridge``` or a custom Docker network.
+
+Ports: Map ```80``` and ```443``` (TCP/UDP) appropriately.
+
+Variable: Add a variable named ```CLOUDFLARE_API_TOKEN``` and input your token.
+
+Paths:
+
+  * Map ```/etc/caddy/Caddyfile directly``` to your local Caddyfile.
+
+  * Map ```/data``` to your appdata directory to ensure your generated SSL certificates remain persistent across reboots.
+
+
+---
+
+### Example Caddyfile
+Here is a template demonstrating how to structure your Caddyfile to utilise the Cloudflare DNS module for a wildcard domain. Note the required ```tls``` block configuration.
+```Caddyfile
+# Global Block
+{
+    email your_email@domain.com
+}
+
+# The Wildcard Block: Secures everything under your domain
+*.yourdomain.com {
+    tls {
+        # Instructs Caddy to use the Cloudflare API for domain verification
+        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+        resolvers 1.1.1.1
+        propagation_timeout -1
+        propagation_delay 60s
+    }
+
+    # Example internal routing (Must use internal container ports on a shared Docker network)
+    @example host app.yourdomain.com
+    handle @example {
+        reverse_proxy app_container_name:8080
+    }
+    
+    # Catch-All Security: Drops requests to undefined subdomains
+    handle {
+        abort
+    }
+}
+```
+---
+
+## 🔒 Security Best Practices
+
+* API Tokens: Never use a Global API Key. Always generate a restricted Cloudflare API Token with strictly the Zone:DNS:Edit permissions for the specific zones you intend to route.
+
+* Persistent Storage: Always mount the /data directory. Caddy stores your Let's Encrypt certificates here. Failing to mount this volume will result in Caddy requesting new certificates upon every container restart, which will quickly trigger Let's Encrypt rate limits.
+
+* Internal Routing: When reverse proxying to other containers on the same Docker bridge network, always specify the target container's internal, hardcoded port rather than the external host port.
+---
+
+## 🤝 Contributing & Licensing
+
+Contributions, issues, and feature requests are welcome. Feel free to check the issues page if you want to contribute.
+
+This project is licensed under the MIT License.
+
+---
