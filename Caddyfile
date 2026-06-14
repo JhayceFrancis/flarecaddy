@@ -1,29 +1,27 @@
-# Here is a template demonstrating how to structure your Caddyfile to utilise the Cloudflare DNS module for a wildcard domain. Note the required tls block configuration.
-# Note the required tls block configuration.
-
-# Global Block
 {
-    email your_email@domain.com
+	email {env.ACME_EMAIL}
+	servers {
+		metrics
+	}
 }
 
-# The Wildcard Block: Secures everything under your domain
-*.yourdomain.com {
-    tls {
-        # Instructs Caddy to use the Cloudflare API for domain verification
-        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
-        resolvers 1.1.1.1
-        propagation_timeout -1
-        propagation_delay 60s
-    }
-
-    # Example internal routing (Must use internal container ports on a shared Docker network)
-    @example host app.yourdomain.com
-    handle @example {
-        reverse_proxy app_container_name:8080
-    }
-    
-    # Catch-All Security: Drops requests to undefined subdomains
-    handle {
-        abort
-    }
+(security_headers) {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
 }
+
+(cloudflare_tls) {
+	tls {
+		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+		resolvers 1.1.1.1
+		propagation_timeout -1
+		propagation_delay 60s
+	}
+}
+
+import /etc/caddy/conf.d/*.caddyfile
