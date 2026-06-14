@@ -19,9 +19,16 @@
 	tls {
 		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
 		resolvers 1.1.1.1
-		propagation_timeout -1
-		propagation_delay 60s
 	}
 }
 
-import /etc/caddy/conf.d/*.caddyfile
+# The Wildcard Wrapper MUST enclose the import
+*.{env.DOMAIN_NAME} {
+	import cloudflare_tls
+	
+	import /etc/caddy/conf.d/*.caddyfile
+	
+	handle {
+		abort
+	}
+}
