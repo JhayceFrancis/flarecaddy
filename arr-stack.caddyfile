@@ -1,0 +1,27 @@
+# --- Routing for Radarr ---
+	@radarr host radarr.{env.DOMAIN_NAME}
+	handle @radarr {
+		import security_headers
+		reverse_proxy radarr:7878
+	}
+
+	# --- Routing for Sonarr ---
+	@sonarr host sonarr.{env.DOMAIN_NAME}
+	handle @sonarr {
+		import security_headers
+		reverse_proxy sonarr:8989
+	}
+
+	# --- Routing for Lidarr ---
+	@lidarr host lidarr.{env.DOMAIN_NAME}
+	handle @lidarr {
+		import security_headers
+		reverse_proxy lidarr:8686
+	}
+
+	# --- Routing for Prowlarr ---
+	@prowlarr host prowlarr.{env.DOMAIN_NAME}
+	handle @prowlarr {
+		import security_headers
+		reverse_proxy prowlarr:9696
+	}

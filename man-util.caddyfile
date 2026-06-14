@@ -1,0 +1,80 @@
+# --- Routing for Unraid Management ---
+	@jctower host jctower.{env.DOMAIN_NAME}
+	handle @jctower {
+		import security_headers
+		reverse_proxy 10.255.1.100:8080
+	}
+
+	# --- Routing for Krainstream ---
+	@krainstream host krainstream.{env.DOMAIN_NAME}
+	handle @krainstream {
+		import security_headers
+		reverse_proxy krainstream:3000
+	}
+
+	# --- Routing for Dashboarr Backend ---
+	@dashboarr-backend host dashboarr.{env.DOMAIN_NAME}
+	handle @dashboarr-backend {
+		import security_headers
+		reverse_proxy dashboarr-backend:4000
+	}
+
+	# --- Routing for Open-WebUI ---
+	@open-webui host open-webui.{env.DOMAIN_NAME}
+	handle @open-webui {
+		import security_headers
+		reverse_proxy open-webui:3390
+	}
+
+	# --- Routing for Copilot-Proxy ---
+	@copilot-proxy host copilot-proxy.{env.DOMAIN_NAME}
+	handle @copilot-proxy {
+		import security_headers
+		reverse_proxy copilot-proxy:8781
+	}
+
+	# --- Routing for ChangeDetection.io ---
+	@changedetection host changedetection.{env.DOMAIN_NAME}
+	handle @changedetection {
+		import security_headers
+		reverse_proxy changedetection:5000
+	}
+
+	# --- Routing for Browserless.io ---
+	@browserless host browserless.{env.DOMAIN_NAME}
+	handle @browserless {
+		import security_headers
+		reverse_proxy browserless:3650
+	}
+
+	# --- Routing for Meilisearch ---
+	@meilisearch host meilisearch.{env.DOMAIN_NAME}
+	handle @meilisearch {
+		import security_headers
+		reverse_proxy meilisearch:7700
+	}
+
+	# --- Routing for Resilio-Sync ---
+	@resilio-sync host resilio-sync.{env.DOMAIN_NAME}
+	handle @resilio-sync {
+		import security_headers
+		reverse_proxy resilio-sync:8888
+	}
+
+	# --- Routing for Flaresolverr ---
+	@flaresolverr host flaresolverr.{env.DOMAIN_NAME}
+	handle @flaresolverr {
+		import security_headers
+		reverse_proxy flaresolverr:8191
+	}
+
+	# --- Routing for Chromium ---
+	@chromium host chromium.{env.DOMAIN_NAME}
+	handle @chromium {
+		import security_headers
+		reverse_proxy https://10.255.1.100:3001 {
+			transport http {
+				tls_insecure_skip_verify
+			}
+		}
+	}

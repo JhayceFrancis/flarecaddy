@@ -1,0 +1,55 @@
+# --- Routing for qBittorrent ---
+	@qbittorrent host qbittorrent.{env.DOMAIN_NAME}
+	handle @qbittorrent {
+		import security_headers
+		reverse_proxy tailscaled:8008
+	}
+
+	# --- Routing for aMuTorrent ---
+	@amutorrent host amutorrent.{env.DOMAIN_NAME}
+	handle @amutorrent {
+		import security_headers
+		reverse_proxy tailscaled:4000
+	}
+
+	# --- Routing for Stash ---
+	@stash host stash.{env.DOMAIN_NAME}
+	handle @stash {
+		import security_headers
+		reverse_proxy tailscaled:9999
+	}
+
+	# --- Routing for cli_debrid ---
+	@cli_debrid host cli_debrid.{env.DOMAIN_NAME}
+	handle @cli_debrid {
+		import security_headers
+		reverse_proxy tailscaled:5000
+	}
+
+	# --- Routing for Mylar3 ---
+	@mylar3 host mylar3.{env.DOMAIN_NAME}
+	handle @mylar3 {
+		import security_headers
+		reverse_proxy tailscaled:8090
+	}
+
+	# --- Routing for Komga ---
+	@komga host komga.{env.DOMAIN_NAME}
+	handle @komga {
+		import security_headers
+		reverse_proxy tailscaled:8080
+	}
+
+	# --- Routing for Shoko Server ---
+	@shoko_server host shoko_server.{env.DOMAIN_NAME}
+	handle @shoko_server {
+		import security_headers
+		reverse_proxy tailscaled:8111
+	}
+
+	# --- Routing for Anibridge ---
+	@anibridge host anibridge.{env.DOMAIN_NAME}
+	handle @anibridge {
+		import security_headers
+		reverse_proxy tailscaled:8000
+	}

@@ -1,0 +1,41 @@
+# --- Routing for Plex ---
+	@plex-media-server host plex.{env.DOMAIN_NAME}
+	handle @plex-media-server {
+		import security_headers
+		reverse_proxy plex:32400
+	}
+
+	# --- Routing for Jellyfin ---
+	@jellyfin host jellyfin.{env.DOMAIN_NAME}
+	handle @jellyfin {
+		import security_headers
+		reverse_proxy jellyfin:8096
+	}
+
+	# --- Routing for Tautulli ---
+	@tautulli host tautulli.{env.DOMAIN_NAME}
+	handle @tautulli {
+		import security_headers
+		reverse_proxy tautulli:8181
+	}
+
+	# --- Routing for Decypharr ---
+	@decypharr host decypharr.{env.DOMAIN_NAME}
+	handle @decypharr {
+		import security_headers
+		reverse_proxy decypharr:8282
+	}
+
+	# --- Routing for Strmbridge ---
+	@strmbridge host strmbridge.{env.DOMAIN_NAME}
+	handle @strmbridge {
+		import security_headers
+		reverse_proxy strmbridge:9847
+	}
+
+	# --- Routing for Karakeep ---
+	@karakeep host karakeep.{env.DOMAIN_NAME}
+	handle @karakeep {
+		import security_headers
+		reverse_proxy karakeep:3000
+	}
