@@ -1,0 +1,15 @@
+version: 2
+updates:
+  # Monitors your Dockerfile
+  # Updates your caddy:builder-alpine and caddy:alpine base images
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Monitors your .github/workflows/main.yml
+  # Updates actions/checkout, docker/login-action, etc.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
